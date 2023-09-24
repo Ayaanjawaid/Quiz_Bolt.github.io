@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JAVASCRIPT-QUIZ | BOLTQUIZ</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Graduate&display=swap");
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: "Graduate", serif;
+      cursor: pointer;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #fddc07;
+      margin: 0;
+      padding: 0;
+    }
+    .quiz-container {
+      max-width: 700px;
+      margin: 100px auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 25px;
+      box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .question {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    .options button {
+      display: block;
+      width: 50%;
+      padding: 10px;
+      margin: 15px 0;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .options button:hover {
+      background-color: #0056b3;
+    }
+    .score {
+      font-size: 16px;
+      margin-top: 30px;
+    }
+    #go-to-home, #retry-quiz, #show-grade {
+      display: none;
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <center>
+    <div class="quiz-container">
+      <h1>JavaScript QUIZ</h1>
+      <div class="question">
+        <p id="question-text"></p>
+      </div>
+      <div class="options">
+        <button id="option-1"></button>
+        <button id="option-2"></button>
+        <button id="option-3"></button>
+      </div>
+      <div class="score">
+        <p>Score: <span id="score">0</span></p>
+      </div>
+      <button id="go-to-home">Go to Home</button>
+      <button id="retry-quiz">Retry Quiz</button>
+      <button id="show-grade">Show Grade</button>
+    </div>
+    <script>
+      const questionText = document.getElementById("question-text");
+      const optionButtons = document.querySelectorAll(".options button");
+      const scoreDisplay = document.getElementById("score");
+      const showGradeButton = document.getElementById("show-grade");
+      const goToHomeButton = document.getElementById("go-to-home");
+      const retryQuizButton = document.getElementById("retry-quiz");
+
+      const questions = [
+        {
+          question: "What is the correct way to write a JavaScript array?",
+          options: [
+            "var colors = 'red', 'green', 'blue';",
+            "var colors = ['red', 'green', 'blue'];",
+            "var colors = (1:'red', 2:'green', 3:'blue');",
+          ],
+          answer: "var colors = ['red', 'green', 'blue'];",
+        },
+        {
+          question: "How do you declare a JavaScript variable?",
+          options: [
+            "variable carName;",
+            "var carName;",
+            "v carName;",
+          ],
+          answer: "var carName;",
+        },
+        {
+          question: "What is the correct syntax for a comment in JavaScript?",
+          options: [
+            "<!--This is a comment-->",
+            "//This is a comment",
+            "/*This is a comment*/",
+          ],
+          answer: "//This is a comment",
+        },
+        {
+          question: "How can you add a comment in JavaScript?",
+          options: [
+            "This is a comment",
+            "//This is a comment",
+            "#This is a comment",
+          ],
+          answer: "//This is a comment",
+        },
+        {
+          question: "Which operator is used to assign a value to a variable in JavaScript?",
+          options: [
+            "*",
+            "=",
+            ":",
+          ],
+          answer: "=",
+        },
+      ];
+
+      let currentQuestionIndex = 0;
+      let score = 0;
+
+      function displayQuestion() {
+        const currentQuestion = questions[currentQuestionIndex];
+        questionText.textContent = currentQuestion.question;
+        optionButtons[0].textContent = currentQuestion.options[0];
+        optionButtons[1].textContent = currentQuestion.options[1];
+        optionButtons[2].textContent = currentQuestion.options[2];
+      }
+
+      function checkAnswer(selectedOption) {
+        const currentQuestion = questions[currentQuestionIndex];
+
+        if (selectedOption === currentQuestion.answer) {
+          score++;
+        }
+        currentQuestionIndex++;
+
+        if (currentQuestionIndex < questions.length) {
+          displayQuestion();
+        } else {
+          endGame();
+        }
+
+        scoreDisplay.textContent = score;
+      }
+
+      function endGame() {
+        questionText.textContent = "Quiz completed!";
+        optionButtons[0].style.display = "none";
+        optionButtons[1].style.display = "none";
+        optionButtons[2].style.display = "none";
+        showGradeButton.style.display = "block";
+        goToHomeButton.style.display = "block";
+        retryQuizButton.style.display = "block";
+      }
+
+      showGradeButton.addEventListener("click", () => {
+        showGradeButton.style.display = "none";
+        const gradeDisplay = document.createElement("p");
+        gradeDisplay.textContent = getGrade(score);
+        document.querySelector(".score").appendChild(gradeDisplay);
+      });
+
+      function getGrade(score) {
+        if (score >= 3) {
+          return "Excellent! You scored an A.";
+        } else if (score >= 2) {
+          return "Good job! You scored a B.";
+        } else {
+          return "You scored a C. Keep practicing!";
+        }
+      }
+
+      displayQuestion();
+
+      optionButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          checkAnswer(button.textContent);
+        });
+      });
+
+      goToHomeButton.addEventListener("click", () => {
+        window.location.href = "/index.html"; // Replace with your actual home page URL
+      });
+
+      retryQuizButton.addEventListener("click", () => {
+        currentQuestionIndex = 0;
+        score = 0;
+        scoreDisplay.textContent = score;
+        displayQuestion();
+        optionButtons[0].style.display = "block";
+        optionButtons[1].style.display = "block";
+        optionButtons[2].style.display = "block";
+        const gradeDisplay = document.querySelector(".score p");
+        if (gradeDisplay) {
+          gradeDisplay.remove();
+        }
+        goToHomeButton.style.display = "none";
+        retryQuizButton.style.display = "none";
+      });
+    </script>
+  </center>
+</body>
+</html>
+

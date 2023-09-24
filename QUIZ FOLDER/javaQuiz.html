@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JAVA-QUIZ | BOLTQUIZ</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Graduate&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: "Graduate", serif;
+        cursor: pointer;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: #4a4a4a;
+        margin: 0;
+        padding: 0;
+      }
+      .quiz-container {
+        max-width: 700px;
+        margin: 100px auto;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 25px;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
+          rgba(0, 0, 0, 0.22) 0px 10px 10px;
+      }
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      .question {
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+      .options button {
+        display: block;
+        width: 50%;
+        padding: 10px;
+        margin: 15px 0;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .options button:hover {
+        background-color: #0056b3;
+      }
+      .score {
+        font-size: 16px;
+        margin-top: 30px;
+      }
+      #go-to-home,
+      #retry-quiz,
+      #show-grade {
+        display: none;
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <center>
+      <div class="quiz-container">
+        <h1>JAVA QUIZ</h1>
+        <div class="question">
+          <p id="question-text"></p>
+        </div>
+        <div class="options">
+          <button id="option-1"></button>
+          <button id="option-2"></button>
+          <button id="option-3"></button>
+        </div>
+        <div class="score">
+          <p>Score: <span id="score">0</span></p>
+        </div>
+        <button id="go-to-home">Go to Home</button>
+        <button id="retry-quiz">Retry Quiz</button>
+        <button id="show-grade">Show Grade</button>
+      </div>
+      <script>
+        const questionText = document.getElementById("question-text");
+        const optionButtons = document.querySelectorAll(".options button");
+        const scoreDisplay = document.getElementById("score");
+        const showGradeButton = document.getElementById("show-grade");
+        const goToHomeButton = document.getElementById("go-to-home");
+        const retryQuizButton = document.getElementById("retry-quiz");
+
+        const questions = [
+          {
+            question: "What is Java?",
+            options: [
+              "A type of coffee",
+              "A programming language",
+              "A computer hardware component",
+            ],
+            answer: "A programming language",
+          },
+          {
+            question:
+              "Which of the following is not a primitive data type in Java?",
+            options: ["int", "boolean", "float", "string"],
+            answer: "string",
+          },
+          {
+            question: "What is the main purpose of a constructor in Java?",
+            options: [
+              "To create objects",
+              "To perform mathematical operations",
+              "To declare variables",
+            ],
+            answer: "To create objects",
+          },
+          {
+            question: "In Java, how do you define a constant?",
+            options: [
+              'Using the "constant" keyword',
+              "By declaring a variable with the final keyword",
+              "By using the const keyword",
+            ],
+            answer: "By declaring a variable with the final keyword",
+          },
+          {
+            question:
+              "Which Java keyword is used to define a class that cannot be instantiated?",
+            options: ["final", "abstract", "static", "private"],
+            answer: "abstract",
+          },
+          {
+            question:
+              "What is the default value of a boolean variable in Java?",
+            options: ["true", "false", "0", "1"],
+            answer: "false",
+          },
+          {
+            question:
+              "Which loop is used to iterate over elements of an array or a collection in Java?",
+            options: ["for", "while", "do-while", "foreach"],
+            answer: "foreach",
+          },
+          {
+            question: 'In Java, what is the purpose of the "break" statement?',
+            options: [
+              "To exit a loop or switch statement",
+              "To execute the next iteration of a loop",
+              "To declare a variable",
+            ],
+            answer: "To exit a loop or switch statement",
+          },
+          {
+            question: "What is the Java Virtual Machine (JVM)?",
+            options: [
+              "A virtual coffee machine",
+              "A software that runs Java bytecode",
+              "A hardware component in a computer",
+            ],
+            answer: "A software that runs Java bytecode",
+          },
+          {
+            question:
+              "Which Java library is used for input and output operations?",
+            options: ["java.util", "java.io", "java.lang"],
+            answer: "java.io",
+          },
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function displayQuestion() {
+          const currentQuestion = questions[currentQuestionIndex];
+          questionText.textContent = currentQuestion.question;
+          optionButtons[0].textContent = currentQuestion.options[0];
+          optionButtons[1].textContent = currentQuestion.options[1];
+          optionButtons[2].textContent = currentQuestion.options[2];
+        }
+
+        function checkAnswer(selectedOption) {
+          const currentQuestion = questions[currentQuestionIndex];
+
+          if (selectedOption === currentQuestion.answer) {
+            score++;
+          }
+          currentQuestionIndex++;
+
+          if (currentQuestionIndex < questions.length) {
+            displayQuestion();
+          } else {
+            endGame();
+          }
+
+          scoreDisplay.textContent = score;
+        }
+
+        function endGame() {
+          questionText.textContent = "Quiz completed!";
+          optionButtons[0].style.display = "none";
+          optionButtons[1].style.display = "none";
+          optionButtons[2].style.display = "none";
+          showGradeButton.style.display = "block";
+          goToHomeButton.style.display = "block";
+          retryQuizButton.style.display = "block";
+        }
+
+        showGradeButton.addEventListener("click", () => {
+          showGradeButton.style.display = "none";
+          const gradeDisplay = document.createElement("p");
+          gradeDisplay.textContent = getGrade(score);
+          document.querySelector(".score").appendChild(gradeDisplay);
+        });
+
+        function getGrade(score) {
+          if (score >= 8) {
+            return "Excellent! You scored an A.";
+          } else if (score >= 5) {
+            return "Good job! You scored a B.";
+          } else {
+            return "You scored a C. Keep practicing!";
+          }
+        }
+
+        displayQuestion();
+
+        optionButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            checkAnswer(button.textContent);
+          });
+        });
+
+        goToHomeButton.addEventListener("click", () => {
+          window.location.href = "/index.html"; // Replace with your actual home page URL
+        });
+
+        retryQuizButton.addEventListener("click", () => {
+          currentQuestionIndex = 0;
+          score = 0;
+          scoreDisplay.textContent = score;
+          displayQuestion();
+          optionButtons[0].style.display = "block";
+          optionButtons[1].style.display = "block";
+          optionButtons[2].style.display = "block";
+          showGradeButton.style.display = "none";
+          goToHomeButton.style.display = "none";
+          retryQuizButton.style.display = "none";
+          const existingGradeDisplay = document.querySelector(".score p");
+          if (existingGradeDisplay) {
+            existingGradeDisplay.remove();
+          }
+        });
+      </script>
+    </center>
+  </body>
+</html>
